@@ -1,0 +1,79 @@
+app-id: com.github.h3h3poteto.Whalebird
+runtime: org.freedesktop.Sdk
+runtime-version: '18.08'
+base: org.electronjs.Electron2.BaseApp
+base-version: '18.08'
+sdk: org.freedesktop.Sdk
+command: whalebird
+rename-desktop-file: whalebird.desktop
+rename-icon: whalebird
+separate-locales: false
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=pulseaudio
+  - --share=network
+  - --device=dri
+  - --filesystem=host
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.freedesktop.secrets
+  - --talk-name=org.gtk.vfs
+  - --talk-name=org.gtk.vfs.*
+  - --env=ELECTRON_TRASH=gio
+  - --env=LD_LIBRARY_PATH=/app/lib
+modules:
+  - name: libsecret
+    config-opts:
+      - --disable-manpages
+      - --disable-gtk-doc
+      - --disable-static
+      - --disable-introspection
+    cleanup:
+      - /bin
+      - /include
+      - /lib/pkgconfig
+      - /lib/gtk-2.0/include
+      - /share/gtk-doc
+      - "*.la"
+    sources:
+      - type: archive
+        url: http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.5.tar.xz
+        sha256: 9ce7bd8dd5831f2786c935d82638ac428fa085057cc6780aba0e39375887ccb3
+      - type: shell
+        commands:
+          - autoreconf -f
+
+  - name: node
+    buildsystem: simple
+    build-commands:
+      - cp -r * /app
+    sources:
+      - type: archive
+        url: https://nodejs.org/dist/v10.11.0/node-v10.11.0-linux-x64.tar.xz
+        sha256: c2eab149e7f0712a6a3eb672a76d657b049a3b3ae0c2edc2e0571df5049fe82c
+
+  - name: whalebird
+    buildsystem: simple
+    build-options:
+      append-path: /app/local/bin
+      build-args:
+        - --share=network
+    build-commands:
+      - ar x whalebird.deb
+      - tar xvf data.tar.xz
+      - mkdir -p /app/share/whalebird
+      - cp -rf ./opt/Whalebird/* /app/share/whalebird
+      - cp -rf ./usr/* /app
+      - install -Dm744 whalebird /app/bin
+      - desktop-file-edit --set-icon=com.github.h3h3poteto.Whalebird /app/share/applications/whalebird.desktop
+      - desktop-file-edit --set-key=Exec --set-value='/app/bin/whalebird %F' /app/share/applications/whalebird.desktop
+
+    sources:
+      - type: file
+        url: https://github.com/h3poteto/whalebird-desktop/releases/download/2.3.0/Whalebird-2.3.0-linux-x64.deb
+        sha256: e8855c36fb5f3ccea80d713619e6d280057b70e3d440524f334ff3135b951461
+        dest-filename: whalebird.deb
+      - type: script
+        dest-filename: whalebird
+        commands:
+          - exec /app/share/whalebird/whalebird "$@"
