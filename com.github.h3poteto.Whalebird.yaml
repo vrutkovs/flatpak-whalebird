@@ -70,8 +70,8 @@ modules:
 
     sources:
       - type: file
-        url: https://github.com/h3poteto/whalebird-desktop/releases/download/2.3.0/Whalebird-2.3.0-linux-x64.deb
-        sha256: e8855c36fb5f3ccea80d713619e6d280057b70e3d440524f334ff3135b951461
+        url: https://github.com/h3poteto/whalebird-desktop/releases/download/2.3.1/Whalebird-2.3.1-linux-x64.deb
+        sha256: 241bdb653e49f0ed08f7e9fc46d6c5f630f632220a638805048881e3f7a5c91c
         dest-filename: whalebird.deb
       - type: script
         dest-filename: whalebird
