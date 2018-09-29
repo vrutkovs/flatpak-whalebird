@@ -2,7 +2,7 @@
 Title=Whalebird (Unofficial)
 Name=com.github.h3h3poteto.Whalebird
 Branch=master
-Url=https://vrutkovs.github.io/whalebird-flatpak/repo
+Url=https://vrutkovs.github.io/flatpak-whalebird/repo
 IsRuntime=False
 RuntimeRepo=https://flathub.org/repo/flathub.flatpakrepo
 Comment=Whalebird is a mastodon client for desktop application
